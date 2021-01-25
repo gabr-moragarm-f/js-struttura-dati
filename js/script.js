@@ -1,4 +1,4 @@
-
+// Datas -----------------------------------------------------------------------
 const fieldCodes = [
   'W', 'U', 'B', 'R', 'G'
 ]
@@ -191,10 +191,10 @@ const cards = [{
   }
 
 }]
+// -----------------------------------------------------------------------------
 
-console.log(cards);
-
-function print(elementHTML, array) {
+// Functions -------------------------------------------------------------------
+function render(elementHTML, array) {
   elementHTML.innerHTML = ''
 
   array.forEach((item) => {
@@ -204,28 +204,49 @@ function print(elementHTML, array) {
   });
 }
 
-const selectorHTML = document.getElementsByClassName('selector')[0]
+function renderOption(optionList, optionInHTML) {
+  optionList.forEach((element) => {
+    optionInHTML.innerHTML += `
+    <option value="${element}">${element}</option>
+    `
+  });
+};
+// -----------------------------------------------------------------------------
 
-powerOptions.forEach((element) => {
-  selectorHTML.innerHTML += `
-  <option value="${element}">${element}</option>
-  `
-});
+console.log(cards);
 
+const powerSelectorHTML = document.getElementsByClassName('power-selector')[0]
+
+renderOption(powerOptions, powerSelectorHTML)
+
+const typeSelectorHTML = document.getElementsByClassName('type-selector')[0]
+
+renderOption(cardTypes, typeSelectorHTML)
 
 const cardsListBox = document.getElementsByClassName('cards-list-box')[0]
 
-print(cardsListBox, cards)
+render(cardsListBox, cards)
 
-selectorHTML.addEventListener('change', () => {
+powerSelectorHTML.addEventListener('change', () => {
   let filteredCards = cards.filter((element, index, array) => {
-    console.log(element.stats.power);
-    return element.stats.power === parseInt(selectorHTML.value);
+    return element.stats.power === parseInt(powerSelectorHTML.value);
   });
 
-  if (selectorHTML.value === 'all') {
-    print(cardsListBox, cards)
+  if (powerSelectorHTML.value === 'all') {
+    render(cardsListBox, cards)
   }else {
-    print(cardsListBox, filteredCards)
+    render(cardsListBox, filteredCards)
+  }
+})
+
+typeSelectorHTML.addEventListener('change', () => {
+  let filteredCards = cards.filter((element, index, array) => {
+    return element.cardType === typeSelectorHTML.value
+  });
+
+  if (typeSelectorHTML.value === 'all') {
+    render(cardsListBox, cards)
+  }else {
+    render(cardsListBox, filteredCards)
   }
 })
